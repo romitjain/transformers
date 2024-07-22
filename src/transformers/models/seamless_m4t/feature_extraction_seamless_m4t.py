@@ -286,8 +286,10 @@ class SeamlessM4TFeatureExtractor(SequenceFeatureExtractor):
 
         remainder = num_frames % self.stride
         if remainder != 0:
-            input_features = input_features[:, :num_frames, :]
-            attention_mask = attention_mask[:, :num_frames]
+            input_features = input_features[:, :num_frames-remainder, :]
+            attention_mask = attention_mask[:, :num_frames-remainder]
+
+            num_frames = num_frames-remainder
 
         input_features = np.reshape(
             input_features, (batch_size, num_frames // self.stride, num_channels * self.stride)
